@@ -35,6 +35,9 @@ WORKDIR /hexo
 # 复制完整的 Hexo 站点（含 public、node_modules、package.json 等）
 COPY --from=builder /hexo /hexo
 
+# 关键：清除默认配置
+RUN rm -f /etc/nginx/sites-enabled/default /etc/nginx/conf.d/default.conf
+
 # 复制 nginx 配置文件（静态文件服务）
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 

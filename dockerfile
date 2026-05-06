@@ -11,7 +11,7 @@ WORKDIR /hexo
 # 安装 Hexo CLI，初始化站点
 RUN npm install -g hexo-cli
 RUN hexo init . && npm install
-
+ENV PATH="/usr/local/lib/node_modules/.bin:${PATH}"
 # 安装 Butterfly 主题及常用插件
 RUN npm install hexo-theme-butterfly --save && \
     sed -i 's/^theme:.*/theme: butterfly/' _config.yml

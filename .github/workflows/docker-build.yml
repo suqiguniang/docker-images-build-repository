@@ -33,8 +33,12 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}
           tags: |
+            # 分支名标签（如 main）
             type=ref,event=branch
+            # commit SHA 标签
             type=sha
+            # 当推送到 main 分支时，额外打上 latest 标签
+            type=raw,value=latest,enable=${{ github.ref == 'refs/heads/main' }}
 
       - name: Build and push
         uses: docker/build-push-action@v5

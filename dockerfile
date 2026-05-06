@@ -41,9 +41,8 @@ RUN rm -f /etc/nginx/sites-enabled/default /etc/nginx/conf.d/default.conf
 # 复制 nginx 配置文件（静态文件服务）
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# 调整 nginx 运行用户
-echo ">>> 配置 nginx 用户为 root..."
-sed -i 's/^user .*/user root;/' /etc/nginx/nginx.conf
+# 在安装 nginx 后，立即修改用户配置
+RUN sed -i 's/^user .*/user root;/' /etc/nginx/nginx.conf
 
 # 复制启动脚本
 COPY start.sh /start.sh

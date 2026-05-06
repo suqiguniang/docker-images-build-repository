@@ -3,8 +3,11 @@ set -e
 
 cd /hexo
 
-# 后台运行 hexo server（监听 4000 端口）
-hexo server -p 4000 &
+# 使用 npx 运行本地安装的 hexo
+npx hexo server -p 4000 &
 
-# 前台运行 nginx，保持容器存活
+# 等待 hexo 启动
+sleep 2
+
+# 前台运行 nginx
 exec nginx -g "daemon off;"

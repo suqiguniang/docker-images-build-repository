@@ -2,7 +2,7 @@ name: Build and Push Hexo Static Image
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "hexo" ]
   workflow_dispatch:
 
 env:

@@ -1,0 +1,22 @@
+services:
+  hexo-git:
+    image: ghcr.io/suqiguniang/hexo-butterfly-static
+    container_name: hexo-git
+    ports:
+      - "10086:80"      # Nginx
+      - "4000:4000"    # Hexo server
+      - "10022:22"      #ssh
+    volumes:
+      - ./blog:/hexo
+      #- ./git-config:/root
+      # 3. Nginx 日志
+      #- ./nginx-logs:/var/log/nginx
+    environment:
+      - NPM_REGISTRY=https://registry.npmmirror.com
+      - NODE_ENV=production
+    restart: on-failure:3
+    networks:
+      - hexo-network
+networks:
+  hexo-network:
+    driver: bridge

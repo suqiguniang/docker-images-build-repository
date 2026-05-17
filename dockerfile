@@ -3,10 +3,20 @@ FROM node:lts-slim AS builder
 
 # 按要求安装 wget、git、nginx
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends wget git nginx && \
+    apt-get install -y --no-install-recommends wget git nginx openssh-server && \
     rm -rf /var/lib/apt/lists/*
 
 WORKDIR /hexo
+
+# 创建 SSH 运行时目录
+RUN mkdir -p /var/run/sshd
+
+# 配置 root 用户的 SSH 密钥登录
+RUN mkdir -p /root/.ssh && chmod 700 /root/.ssh
+COPY hexo-container-key.pub /root/.ssh/authorized_keys
+RUN chmod 600 /root/.ssh/authorized_keys
+# 使用自定义的 SSH 服务配置
+COPY sshd_config /etc/ssh/sshd_config
 
 # 安装 Hexo CLI，初始化站点
 RUN npm install -g hexo-cli

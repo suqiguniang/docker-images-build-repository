@@ -4,6 +4,8 @@ FROM node:lts-slim AS builder
 # 按要求安装 wget、git、nginx
 RUN apt-get update && \
     apt-get install -y --no-install-recommends wget git nginx openssh-server && \
+    mkdir /var/run/sshd && \
+    echo 'root:password' | chpasswd \
     rm -rf /var/lib/apt/lists/*
 
 WORKDIR /hexo

@@ -1,5 +1,8 @@
 #!/bin/bash
 set -e
+# ========== 新增：启动 SSH 服务 ==========
+echo ">>> 启动 SSH 服务..."
+/usr/sbin/sshd
 
 cd /hexo
 

@@ -25,7 +25,7 @@ jobs:
         with:
           repository: shellus/playwright-mcp
           # 可以指定分支，默认是默认分支（main）
-          ref: main
+          ref: master
           # 不需要 token 就能克隆公开仓库
           persist-credentials: false
 

@@ -1,0 +1,59 @@
+name: Build playwright-mcp from upstream
+
+on:
+  # 手动触发，方便测试
+  workflow_dispatch:
+
+
+env:
+  # 镜像仓库地址，这里使用 GitHub Container Registry
+  REGISTRY: ghcr.io
+  # 推送的镜像名称：ghcr.io/你的用户名/镜像名
+  IMAGE_NAME: ${{ github.repository_owner }}/playwright-mcp
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      # 1. 拉取上游仓库 shellus/playwright-mcp 的源码（不依赖 fork）
+      - name: Checkout upstream repository
+        uses: actions/checkout@v4
+        with:
+          repository: shellus/playwright-mcp
+          # 可以指定分支，默认是默认分支（main）
+          ref: main
+          # 不需要 token 就能克隆公开仓库
+          persist-credentials: false
+
+      # 2. 登录到 GitHub Container Registry（使用自动提供的 GITHUB_TOKEN）
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # 3. 生成镜像标签（基于上游提交哈希和时间戳，便于区分版本）
+      - name: Generate image tags
+        id: meta
+        run: |
+          # 获取上游最新 commit 的短哈希
+          SHORT_SHA=$(git rev-parse --short HEAD)
+          echo "short_sha=${SHORT_SHA}" >> $GITHUB_OUTPUT
+          echo "created=$(date -u +'%Y%m%d-%H%M%S')" >> $GITHUB_OUTPUT
+
+      # 4. 构建并推送 Docker 镜像
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./build/Dockerfile   # 原项目的 Dockerfile 位置
+          push: true
+          tags: |
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.meta.outputs.short_sha }}
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.meta.outputs.created }}

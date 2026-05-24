@@ -1,13 +1,6 @@
 #!/bin/bash
 set -e
-# 启动 SSH 服务
-SSHD_BIN=$(command -v sshd)
-if [ -z "$SSHD_BIN" ]; then
-    echo "错误：未找到 sshd，确认 openssh-server 是否已安装"
-    exit 1
-fi
-echo ">>> 启动 SSH 服务..."
-$SSHD_BIN
+
 cd /hexo
 
 # ---------- 自动初始化 Hexo 站点（仅首次）----------

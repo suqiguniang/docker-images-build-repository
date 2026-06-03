@@ -17,7 +17,7 @@ RUN npm install hexo-theme-butterfly --save && \
     sed -i 's/^theme:.*/theme: butterfly/' _config.yml
 
 RUN npm install hexo-deployer-git hexo-generator-search \
-    hexo-generator-feed hexo-generator-sitemap hexo-butterfly-tag-plugins-plus hexo-wordcount --save
+    hexo-generator-feed hexo-generator-sitemap hexo-butterfly-tag-plugins-plus hexo-symbols-count-time --save
 
 # 编译静态文件
 RUN hexo generate

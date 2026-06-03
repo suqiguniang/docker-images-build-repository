@@ -28,6 +28,10 @@ else
     echo ">>> 检测到已有站点，跳过初始化。"
     # 即使非首次，也确保权限（防止挂载卷权限异常）
     chmod -R +x ./node_modules/.bin/ 2>/dev/null || true
+    echo ">>> 生成静态文件..."
+    ./node_modules/.bin/hexo generate
+
+    echo ">>> 初始化完成！"
 fi
 
 # ---------- 启动 hexo server（后台）----------

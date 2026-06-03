@@ -33,12 +33,12 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}
           tags: |
-            # 分支名标签（如 main）
+            # 分支名标签（如 hexo）
             type=ref,event=branch
             # commit SHA 标签
             type=sha
-            # 当推送到 main 分支时，额外打上 latest 标签
-            type=raw,value=latest,enable=${{ github.ref == 'refs/heads/main' }}
+            # 当推送到 hexo 分支时，额外打上 latest 标签
+            type=raw,value=latest,enable=${{ github.ref == 'refs/heads/hexo' }}
 
       - name: Build and push
         uses: docker/build-push-action@v5
@@ -47,3 +47,15 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+      - name: Save Docker image to tar
+        run: |
+          docker tag ${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:${{ steps.meta.outputs.version }} \
+            ${{ env.IMAGE_NAME }}:latest
+          docker save ${{ env.IMAGE_NAME }}:latest -o hexo-image.tar
+          gzip hexo-image.tar   # 压缩后上传
+
+      - name: Upload image tar
+        uses: actions/upload-artifact@v4
+        with:
+          name: docker-image-tar
+          path: hexo-image.tar.gz

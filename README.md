@@ -10,7 +10,6 @@
 ├── docker-compose.yml               # Docker Compose 编排
 ├── nginx.conf                       # Nginx 静态文件服务配置
 ├── start.sh                         # 容器启动脚本
-├── _config.butterfly.yml            # Butterfly 主题配置（含 aplayerInject）
 ├── hexo-container-key.pub           # （可选）容器 SSH 公钥
 ├── .github/workflows/docker-build.yml  # GitHub Actions 自动构建
 └── README.md
@@ -135,17 +134,9 @@ http://localhost:4000
 | hexo-generator-sitemap | 搜索引擎站点地图 |
 | hexo-butterfly-tag-plugins-plus | Butterfly 标签插件增强版 |
 | hexo-symbols-count-time | 文章字数统计与阅读时长 |
-| hexo-tag-aplayer | Aplayer 音乐播放器 + MetingJS 支持 |
 
 ## 注意事项
 
 - 外部 `_config.yml` 中**必须**设置 `theme: butterfly`，否则会使用 Hexo 默认的 landscape 主题
-- 如需使用 Aplayer 音乐播放器，`_config.yml` 中需包含以下配置：
-  ```yaml
-  aplayer:
-    meting: true
-    asset_inject: false
-  ```
-- `_config.butterfly.yml` 中的 `aplayerInject` 建议保持 `per_page: true`，仅在用到 `{% meting %}` 标签的页面加载播放器资源
 - 容器内的 `node_modules`、`themes`、`scaffolds` 等由镜像构建时生成，不可通过 volume 覆盖
 - 如需添加新插件，需更新 Dockerfile 并重新构建镜像

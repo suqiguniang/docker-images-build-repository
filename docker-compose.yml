@@ -4,13 +4,12 @@ services:
     container_name: hexo-git
     ports:
       - "10086:80"      # Nginx
-      - "4000:4000"    # Hexo server
-      - "10022:22"      #ssh
+      - "4000:4000"     # Hexo server
     volumes:
-      - ./blog:/hexo
-      #- ./git-config:/root
-      # 3. Nginx 日志
-      #- ./nginx-logs:/var/log/nginx
+      # 只映射 source 文件夹和核心配置
+      - ./source:/hexo/source
+      - ./_config.yml:/hexo/_config.yml
+      - ./_config.butterfly.yml:/hexo/_config.butterfly.yml
     environment:
       - NPM_REGISTRY=https://registry.npmmirror.com
       - NODE_ENV=production

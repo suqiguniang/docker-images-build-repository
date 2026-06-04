@@ -16,11 +16,14 @@ ENV PATH="/usr/local/lib/node_modules/.bin:${PATH}"
 RUN npm install hexo-theme-butterfly --save && \
     sed -i 's/^theme:.*/theme: butterfly/' _config.yml
 
-RUN npm install hexo-deployer-git hexo-generator-search \
+RUN npm install hexo-server hexo-deployer-git hexo-generator-search \
     hexo-generator-feed hexo-generator-sitemap hexo-butterfly-tag-plugins-plus hexo-symbols-count-time --save
 
 # 编译静态文件
 RUN hexo generate
+
+# 清理缓存，减小镜像体积
+RUN npm cache clean --force && rm -rf /tmp/*
 
 # ========== 运行阶段 ==========
 FROM node:lts-slim

@@ -11,6 +11,7 @@
 ├── nginx.conf                       # Nginx 静态文件服务配置
 ├── start.sh                         # 容器启动脚本
 ├── hexo-container-key.pub           # （可选）容器 SSH 公钥
+├── setup-hexo.sh                    # 一键安装脚本（非 Docker）
 ├── .github/workflows/docker-build.yml  # GitHub Actions 自动构建
 └── README.md
 ```
@@ -134,6 +135,37 @@ http://localhost:4000
 | hexo-generator-sitemap | 搜索引擎站点地图 |
 | hexo-butterfly-tag-plugins-plus | Butterfly 标签插件增强版 |
 | hexo-symbols-count-time | 文章字数统计与阅读时长 |
+
+## 一键安装（非 Docker）
+
+如果你不想用 Docker，也可以直接用 `setup-hexo.sh` 在裸机上部署 Hexo + Butterfly：
+
+```bash
+bash setup-hexo.sh
+```
+
+**脚本特性：**
+- 通过 **nvm** 安装 **Node.js 24**（若已安装则跳过）
+- 自动安装 Hexo CLI、Butterfly 主题及全套常用插件
+- 生成默认的 `_config.butterfly.yml` 主题配置
+- 创建便捷命令 `hexo-update`（重新生成）和 `hexo-preview`（本地预览）
+- 全程检测已安装项，重复运行也安全
+
+**运行后：**
+
+```bash
+# 写文章
+vim ~/hexo/source/_posts/hello-world.md
+
+# 更新博客
+hexo-update
+
+# 本地预览
+hexo-preview  →  http://localhost:4000
+```
+
+> 可通过环境变量 `HEXO_DIR` 自定义博客目录，默认 `~/hexo`。
+> 可通过 `NPM_REGISTRY` 自定义 npm 镜像源，默认 npmmirror.com。
 
 ## 注意事项
 

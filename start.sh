@@ -15,10 +15,7 @@ if [ ! -f "_config.yml" ]; then
 
     echo ">>> 安装常用插件..."
     npm install hexo-deployer-git hexo-generator-search \
-        hexo-generator-feed hexo-generator-sitemap hexo-butterfly-tag-plugins hexo-symbols-count-time hexo-tag-aplayer --save
-
-    echo ">>> 配置 Aplayer / MetingJS..."
-    echo -e '\n# Aplayer / MetingJS\naplayer:\n  meting: true\n  asset_inject: false' >> _config.yml
+        hexo-generator-feed hexo-generator-sitemap hexo-butterfly-tag-plugins hexo-symbols-count-time --save
 
     # 确保 .bin 目录下的所有可执行文件都有执行权限
     chmod -R +x ./node_modules/.bin/

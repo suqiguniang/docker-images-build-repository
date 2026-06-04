@@ -14,10 +14,14 @@ RUN hexo init . && npm install
 ENV PATH="/usr/local/lib/node_modules/.bin:${PATH}"
 # 安装 Butterfly 主题及常用插件
 RUN npm install hexo-theme-butterfly --save && \
-    sed -i 's/^theme:.*/theme: butterfly/' _config.yml
+    sed -i 's/^theme:.*/theme: butterfly/' _config.yml && \
+    echo -e '\n# Aplayer / MetingJS\naplayer:\n  meting: true\n  asset_inject: false' >> _config.yml
 
 RUN npm install hexo-server hexo-deployer-git hexo-generator-search \
     hexo-generator-feed hexo-generator-sitemap hexo-butterfly-tag-plugins-plus hexo-symbols-count-time hexo-wordcount hexo-tag-aplayer --save
+
+# 复制 Butterfly 主题配置文件
+COPY _config.butterfly.yml /hexo/_config.butterfly.yml
 
 # 编译静态文件
 RUN hexo generate

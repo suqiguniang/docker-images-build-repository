@@ -117,7 +117,7 @@ init_hexo() {
     info ">>> 创建 Hexo 站点在 $HEXO_DIR..."
     mkdir -p "$HEXO_DIR"
     cd "$HEXO_DIR"
-    hexo init .
+    GIT_SSL_NO_VERIFY=1 hexo init .
     npm install --registry="$NPM_REGISTRY"
 
     ok "Hexo 站点初始化完成"

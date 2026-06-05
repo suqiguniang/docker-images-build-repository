@@ -21,6 +21,7 @@ err()   { echo -e "${RED}[ERROR]${NC} $1"; }
 # ---------- 配置参数 ----------
 HEXO_DIR="${HEXO_DIR:-$HOME/hexo}"
 NPM_REGISTRY="${NPM_REGISTRY:-https://registry.npmmirror.com}"
+PROXY="${PROXY:-http://192.168.1.10:7890}"
 
 # ==========================================
 # 第一步：通过 nvm 安装 Node 24
@@ -117,7 +118,15 @@ init_hexo() {
     info ">>> 创建 Hexo 站点在 $HEXO_DIR..."
     mkdir -p "$HEXO_DIR"
     cd "$HEXO_DIR"
+    export https_proxy="$PROXY"
+    export http_proxy="$PROXY"
+    git config --global http.proxy "$PROXY"
+    git config --global https.proxy "$PROXY"
     GIT_SSL_NO_VERIFY=1 hexo init .
+    # 还原 git 代理设置（hexo init 后才取消）
+    git config --global --unset http.proxy 2>/dev/null || true
+    git config --global --unset https.proxy 2>/dev/null || true
+    unset https_proxy http_proxy
     npm install --registry="$NPM_REGISTRY"
 
     ok "Hexo 站点初始化完成"
